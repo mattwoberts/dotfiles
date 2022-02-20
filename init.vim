@@ -18,6 +18,9 @@ call plug#begin(stdpath('data') . '/plugged')
 
 " Here is where we put the plugins we're going to use...
 "
+" Code formatter..
+Plug 'sbdchd/neoformat'
+"
 " 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -34,7 +37,7 @@ Plug 'nvim-lua/completion-nvim'
 " Plug 'hrsh7th/cmp-buffer'
 
 Plug 'neovim/nvim-lspconfig'
-Plug 'glepnir/lspsaga.nvim'
+Plug 'tami5/lspsaga.nvim'
 
 Plug 'kdheepak/lazygit.nvim'
 
@@ -49,6 +52,7 @@ Plug 'hoob3rt/lualine.nvim'
 " If you want to have icons in your statusline choose one of these
 Plug 'ryanoasis/vim-devicons'
 
+Plug 'kyazdani42/nvim-web-devicons' " for file icons
 Plug 'kyazdani42/nvim-tree.lua'
 
 Plug 'tpope/vim-surround'
@@ -57,6 +61,7 @@ Plug 'tpope/vim-commentary'
 Plug 'mileszs/ack.vim'
 
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+
 
 " Initialize plugin system
 call plug#end()
@@ -145,12 +150,14 @@ lua << EOF
   }
 EOF
 
+lua require'nvim-tree'.setup {}
+
 
 "Telescope setup
 nnoremap <C-p> <cmd>Telescope find_files<cr>
 nnoremap <C-f> <cmd>Telescope live_grep<cr>
 nnoremap <C-b> <cmd>Telescope buffers<cr>
-nnoremap <C-h> <cmd>Telescope help_tags<cr>
+nnoremap <leader>h <cmd>Telescope help_tags<cr>
 
 " nvim-treesitter {{{
 lua <<EOF
@@ -187,13 +194,17 @@ endif
 "-- You dont need to set any of these options. These are the default ones. Only
 lua <<EOF
 -- the loading is important
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+-- You dont need to set any of these options. These are the default ones. Only
+-- the loading is important
 require('telescope').setup {
   extensions = {
     fzf = {
       fuzzy = true,                    -- false will only do exact matching
       override_generic_sorter = true,  -- override the generic sorter
       override_file_sorter = true,     -- override the file sorter
-      case_mode = "ignore_case",        -- or "ignore_case" or "respect_case"
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                        -- the default case_mode is "smart_case"
     }
   }
